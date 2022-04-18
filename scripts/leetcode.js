@@ -626,21 +626,22 @@ const loader = setInterval(() => {
     if (language !== null) {
       // start upload indicator here
       startUpload();
-      chrome.storage.local.get('stats', (s) => {
-        const { stats } = s;
-        const filePath = problemName + problemName + language;
-        let sha = null;
-        if (
-          stats !== undefined &&
-          stats.sha !== undefined &&
-          stats.sha[filePath] !== undefined
-        ) {
-          sha = stats.sha[filePath];
-        }
+      if (typeof(chrome.storage) !== 'undefined') {
+        chrome.storage.local.get('stats', (s) => {
+          const { stats } = s;
+          const filePath = problemName + problemName + language;
+          let sha = null;
+          if (
+            stats !== undefined &&
+            stats.sha !== undefined &&
+            stats.sha[filePath] !== undefined
+          ) {
+            sha = stats.sha[filePath];
+          }
 
-        /* Only create README if not already created */
-        if (sha === null) {
-          /* @TODO: Change this setTimeout to Promise */
+          /* Only create README if not already created */
+          // if (sha === null) {
+            /* @TODO: Change this setTimeout to Promise */
           uploadGit(
             btoa(unescape(encodeURIComponent(probStatement))),
             problemName,
@@ -648,8 +649,17 @@ const loader = setInterval(() => {
             readmeMsg,
             'upload',
           );
-        }
-      });
+          // }
+        });
+      } else {
+        uploadGit(
+          btoa(unescape(encodeURIComponent(probStatement))),
+          problemName,
+          'README.md',
+          readmeMsg,
+          'upload',
+        );
+      }
 
       /* get the notes and upload it */
       /* only upload notes if there is any */
