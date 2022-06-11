@@ -664,7 +664,7 @@ const loader = setInterval(() => {
       /* get the notes and upload it */
       /* only upload notes if there is any */
       notes = getNotesIfAny();
-      if (notes.length > 0) {
+      if (notes.length > 1) {
         setTimeout(function () {
           if (notes != undefined && notes.length != 0) {
             console.log('Create Notes');
